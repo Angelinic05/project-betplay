@@ -1,5 +1,8 @@
 package com.campuslands.project.clases;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Equipo {
     private String nombre;
     private int PJ; // Partidos jugados
@@ -9,6 +12,9 @@ public class Equipo {
     private int GF; // Goles a favor
     private int GC; // Goles en contra
     private int TP; // Total de puntos
+    private List<Jugador> jugadores;
+    private List<CuerpoTecnico> cuerpoTecnico;
+    private List<CuerpoMedico> cuerpoMedico;
 
     public Equipo(String nombre) {
         this.nombre = nombre;
@@ -19,10 +25,10 @@ public class Equipo {
         this.GF = 0;
         this.GC = 0;
         this.TP = 0;
+        this.jugadores = new ArrayList<>();
+        this.cuerpoTecnico = new ArrayList<>();
+        this.cuerpoMedico = new ArrayList<>();
     }
-
-    // Getters y Setters para acceder a los atributos
-
 
     public String getNombre() {
         return nombre;
@@ -81,5 +87,28 @@ public class Equipo {
     public void incrementarGC(int goles) {
         this.GC += goles;
     }
-}
 
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    public List<CuerpoTecnico> getCuerpoTecnico() {
+        return cuerpoTecnico;
+    }
+
+    public List<CuerpoMedico> getCuerpoMedico() {
+        return cuerpoMedico;
+    }
+
+    public void agregarJugador(Jugador jugador) {
+        jugadores.add(jugador);
+    }
+
+    public void agregarCuerpoTecnico(CuerpoTecnico tecnico) {
+        cuerpoTecnico.add(tecnico);
+    }
+
+    public void agregarCuerpoMedico(CuerpoMedico medico) {
+        cuerpoMedico.add(medico);
+    }
+}

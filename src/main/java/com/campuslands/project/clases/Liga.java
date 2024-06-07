@@ -1,6 +1,8 @@
 package com.campuslands.project.clases;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Liga {
@@ -14,6 +16,33 @@ public class Liga {
 
     public void registrarEquipo(String nombre) {
         equipos.add(new Equipo(nombre));
+    }
+
+    public void agregarJugadorAEquipo(String nombreEquipo, Jugador jugador) {
+        Equipo equipo = buscarEquipo(nombreEquipo);
+        if (equipo != null) {
+            equipo.agregarJugador(jugador);
+        } else {
+            System.out.println("Equipo no encontrado.");
+        }
+    }
+
+    public void agregarCuerpoTecnicoAEquipo(String nombreEquipo, CuerpoTecnico tecnico) {
+        Equipo equipo = buscarEquipo(nombreEquipo);
+        if (equipo != null) {
+            equipo.agregarCuerpoTecnico(tecnico);
+        } else {
+            System.out.println("Equipo no encontrado.");
+        }
+    }
+
+    public void agregarCuerpoMedicoAEquipo(String nombreEquipo, CuerpoMedico medico) {
+        Equipo equipo = buscarEquipo(nombreEquipo);
+        if (equipo != null) {
+            equipo.agregarCuerpoMedico(medico);
+        } else {
+            System.out.println("Equipo no encontrado.");
+        }
     }
 
     public void registrarPartido(String fecha, String local, String visitante, int golesLocal, int golesVisitante) {
@@ -93,26 +122,41 @@ public class Liga {
     }
 
     public double promedioGolesAnotados() {
-        int totalGoles = totalGolesAnotados();
-        return equipos.size() > 0 ? (double) totalGoles / equipos.size() : 0;
+        return partidos.isEmpty() ? 0 : (double) totalGolesAnotados() / partidos.size();
     }
 
     public void imprimirTabla() {
-        System.out.println(String.format("%-10s %2s %2s %2s %2s %2s %2s %2s",
-                "Equipo", "PJ", "PG", "PP", "PE", "GF", "GC", "TP"));
-        System.out.println("-----------------------------------------------------");
-
+        Collections.sort(equipos, Comparator.comparingInt(Equipo::getTP).reversed());
+        System.out.printf("%-20s %-4s %-4s %-4s %-4s %-4s %-4s %-4s\n", "Equipo", "PJ", "PG", "PE", "PP", "GF", "GC", "TP");
         for (Equipo equipo : equipos) {
-            System.out.println(String.format("%-10s %2d %2d %2d %2d %2d %2d %2d",
-                    equipo.getNombre(), equipo.getPJ(), equipo.getPG(), equipo.getPP(), equipo.getPE(),
-                    equipo.getGF(), equipo.getGC(), equipo.getTP()));
-        }
-
-        System.out.println("\nPartidos:");
-        for (Partido partido : partidos) {
-            System.out.println(String.format("%s: %s %d - %d %s",
-                    partido.getFecha(), partido.getLocal(), partido.getGolesLocal(), partido.getGolesVisitante(), partido.getVisitante()));
+            System.out.printf("%-20s %-4d %-4d %-4d %-4d %-4d %-4d %-4d\n", equipo.getNombre(), equipo.getPJ(), equipo.getPG(), equipo.getPE(), equipo.getPP(), equipo.getGF(), equipo.getGC(), equipo.getTP());
         }
     }
-    
+
+    public void imprimirJugadoresPorEquipo() {
+        for (Equipo equipo : equipos) {
+            System.out.println("Equipo: " + equipo.getNombre());
+            for (Jugador jugador : equipo.getJugadores()) {
+                System.out.printf("Nombre: %-20s Dorsal: %-4d Posición: %-10s\n", jugador.getNombre(), jugador.getDorsal(), jugador.getPosicion());
+            }
+        }
+    }
+
+    public void imprimirCuerpoTecnicoPorEquipo() {
+        for (Equipo equipo : equipos) {
+            System.out.println("Equipo: " + equipo.getNombre());
+            for (CuerpoTecnico tecnico : equipo.getCuerpoTecnico()) {
+                System.out.printf("Nombre: %-20s Rol: %-20s\n", tecnico.getNombre(), tecnico.getRol());
+            }
+        }
+    }
+
+    public void imprimirCuerpoMedicoPorEquipo() {
+        for (Equipo equipo : equipos) {
+            System.out.println("Equipo: " + equipo.getNombre());
+            for (CuerpoMedico medico : equipo.getCuerpoMedico()) {
+                System.out.printf("Nombre: %-20s Rol: %-20s\n", medico.getNombre(), medico.getRol());
+            }
+        }
+    }
 }
